@@ -24,3 +24,23 @@ jar {
     archiveBaseName = 'ci-training'
     archiveVersion =  '1.0'
 }
+
+task "build-custom" {
+    doLast{
+        println "Task build-custom"
+    }
+}
+
+task "test-custom" {
+    dependsOn ':home-task:build-custom'
+    doLast{
+        println "Task test-custom"
+    }
+}
+
+task hello {
+    dependsOn ':home-task:test-custom'
+    doLast{
+        println "Task hello"
+    }
+}
