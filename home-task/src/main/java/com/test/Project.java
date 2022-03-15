@@ -6,6 +6,18 @@ import org.apache.log4j.Logger;
 class Project {
 
  public String getGreeting() {
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
+        System.out.println("str");
         return "Hello, MNT Lab!";
     }
 
