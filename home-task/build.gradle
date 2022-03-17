@@ -4,9 +4,10 @@ plugins {
 
 repositories {
 //    mavenCentral()
-     maven {
-         url "http://localhost:8081/repository/maven-public/"
-     }
+    maven {
+        url "http://localhost:8081/repository/maven-public/"
+        allowInsecureProtocol = true
+    }
 }
 
 sourceCompatibility = 1.8
