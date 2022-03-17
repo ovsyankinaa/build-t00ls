@@ -6,7 +6,7 @@ repositories {
 //    mavenCentral()
     maven {
         url "http://172.22.0.5:8081/repository/maven-public/" {
-          authentication(userName: admin, password: 2022_admin)
+          authentication(userName: admin, password: "2022_admin")
 
         }
         allowInsecureProtocol = true
