@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.test</groupId>
     <artifactId>ci-training</artifactId>
-    <version>1.0</version>
+    <version>${BUILD_NUMBER}</version>
     <packaging>jar</packaging>
     <repositories>
         <repository>
