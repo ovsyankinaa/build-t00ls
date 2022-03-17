@@ -2,9 +2,12 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.test</groupId>
-    <artifactId>ci-training-${BUILD_NUMBER}</artifactId>
+    <artifactId>ci-training</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    <build>
+      <finalName>"ci-training-${BUILD_NAME}"</finalName>
+    </build>
     <repositories>
         <repository>
             <id>nexus-repo</id>
