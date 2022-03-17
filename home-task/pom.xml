@@ -36,14 +36,3 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>     
 </project>
-
-<project>
-    ...
-    <repositories>
-        <repository>
-            <id>private-repo</id>
-            <url>${private-repo.url}</url>
-        </repository>
-    </repositories>
-    ...
-</project>
