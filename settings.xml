@@ -127,6 +127,11 @@ under the License.
       <username>${nexus_user}</username>
       <password>${nexus_pass}</password>
     </server>
+    <server>
+      <id>deploy-repo</id>
+      <username>${nexus_user}</username>
+      <password>${nexus_pass}</password>
+    </server>
     <!-- Another sample, using keys to authenticate.
     <server>
       <id>siteServer</id>

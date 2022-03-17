@@ -35,4 +35,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>     
+    <distributionManagement>
+        <repository>
+            <id>deploy-repo</id>
+            <name>Internal Repository</name>
+            <url>http://172.22.0.5:8081/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>        
 </project>
