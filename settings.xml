@@ -124,8 +124,8 @@ under the License.
     -->
     <server>
       <id>nexus-repo</id>
-      <username>admin</username>
-      <password>2022_nexus</password>
+      <username>jenkins</username>
+      <password>jenkins</password>
     </server>
     <!-- Another sample, using keys to authenticate.
     <server>
