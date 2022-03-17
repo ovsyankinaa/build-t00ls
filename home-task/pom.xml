@@ -42,7 +42,7 @@
         <repository>
             <id>deploy-repo</id>
             <name>Internal Repository</name>
-            <url>http://172.22.0.5:8081/repository/maven-releases/</url>
+            <url>http://172.22.0.5:8081/repository/my_repo/</url>
         </repository>
     </distributionManagement>        
 </project>
