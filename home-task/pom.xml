@@ -5,9 +5,6 @@
     <artifactId>ci-training-${BUILD_NUMBER}</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <build>
-      <finalName>ci-training-${BUILD_NUMBER}</finalName>
-    </build>
     <repositories>
         <repository>
             <id>nexus-repo</id>
