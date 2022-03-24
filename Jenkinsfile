@@ -55,7 +55,9 @@ pipeline {
       }
     }
     stage('ARCHIVE ARTIFACT') {
-      archiveArtifacts artifacts: 'helloworld-project/helloworld-ws/target/*.war'
+      steps{
+        archiveArtifacts artifacts: 'helloworld-project/helloworld-ws/target/*.war'
+      }
     }
   }
 }
