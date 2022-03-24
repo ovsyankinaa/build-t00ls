@@ -8,5 +8,6 @@ node('build-in') {
   stage('BUILD WAR') { 
     dir('helloworld-project/helloworld-ws/') {
     sh 'mvn clean install' 
+    }
   }
 }
