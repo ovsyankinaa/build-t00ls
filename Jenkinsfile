@@ -29,7 +29,7 @@ pipeline {
       }
     }
 
-    stage('BUILD') {
+    stage('BUILD WAR') {
       steps {
         dir('helloworld-project/helloworld-ws/') {
           sh 'mvn clean install'
@@ -37,7 +37,7 @@ pipeline {
       }
     }
 
-    stage('BUILD IMAGE') {
+    stage('BUILD DOCKER IMAGE') {
       steps{
         script{
           docker_img = docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
@@ -45,7 +45,7 @@ pipeline {
       }
     }
 
-    stage('Uploading to Nexus') {
+    stage('UPLOAD NEXUS') {
       steps{  
         script {
           docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
@@ -54,11 +54,9 @@ pipeline {
         }
       }
     }
+    stage('ARCHIVE ARTIFACT') {
+      archiveArtifacts artifacts: 'helloworld-project/helloworld-ws/target/*.war'
+    }
   }
 }
 
-
-/*sonar_scaner_4
-sonar_9.3
-http://192.168.49.1:9000
-sonar*/
