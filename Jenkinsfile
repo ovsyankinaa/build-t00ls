@@ -4,12 +4,14 @@ pipeline {
     maven 'maven_3.8.4' 
   }
   stages {
-    stage('GIT'){
+    stage('GIT') {
       steps {
         cleanWs()
         git branch: 'aausiankin-pipeline', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
       }
-      stage('SONARQUBE'){
+      stage('SONARQUBE') {
+        steps {
+        }
       }
       stage('BUILD WAR') {
         steps {
