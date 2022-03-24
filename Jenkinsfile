@@ -14,17 +14,22 @@ pipeline {
       }
     } 
 
-    stage('BUILD WAR') {
+    stage('SONAR') {
       steps {
-        dir('helloworld-project/helloworld-ws/') {
-          withSonarQubeEnv('sonar_9.3') {
-            sh '''mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar \
+        withSonarQubeEnv('sonar_9.3') {
+          sh '''mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar \
 -Dsonar.projectKey=pipeline:maven \
 -Dsonar.projectName=pipeline_docker_maven \
 -Dsonar.projectVersion=1.0 \
--Dsonar.sources=src/main/java/org/jboss/as/quickstarts/wshelloworld \
--Dsonar.java.binaries=src/main/java/org/jboss/as/quickstarts/wshelloworld'''
-          }
+-Dsonar.sources=helloworld-project/helloworld-ws/src/main/java/org/jboss/as/quickstarts/wshelloworld \
+-Dsonar.java.binaries=helloworld-project/helloworld-ws/src/main/java/org/jboss/as/quickstarts/wshelloworld'''
+        }
+      }
+    }
+
+    stage('BUILD') {
+      steps {
+        dir('helloworld-project/helloworld-ws/') {
           sh 'mvn clean install'
         }
       }
