@@ -18,7 +18,7 @@ pipeline {
       steps {
         dir('helloworld-project/helloworld-ws/') {
           withSonarQubeEnv('sonar_9.3') {
-            sonar.projectKey=pipeline:maven
+            sonar.projectKey="pipeline:maven"
             sonar.projectName=pipeline_docker_maven
             sonar.projectVersion=1.0
             sonar.sources=helloworld-project/helloworld-ws/src/main/java/org/jboss/as/quickstarts/wshelloworld
