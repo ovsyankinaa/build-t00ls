@@ -25,7 +25,7 @@ pipeline {
     stage('BUILD IMAGE') {
       steps{
         script{
-          docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
+          docker_img = docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
         }
       }
     }
@@ -34,7 +34,7 @@ pipeline {
       steps{  
         script {
           docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
-          dockerImage.push("rc-${env.BUILD_NUMBER}")
+          docker_img.push("rc-${env.BUILD_NUMBER}")
           }
         }
       }
