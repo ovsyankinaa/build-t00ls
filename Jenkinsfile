@@ -1,6 +1,7 @@
 pipeline {
   agent { label 'build-in' }
   environment {
+    imageName = "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
     dockerImage = ''
   }
 
@@ -28,7 +29,7 @@ pipeline {
     stage('BUILD IMAGE') {
       steps{
         script{
-          dockerImage = docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
+          dockerImage = docker.build imageName
         }
       }
     }
