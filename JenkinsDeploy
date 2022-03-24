@@ -32,6 +32,14 @@ G2byrLDHntFInFt+1EJ0038N8V1DqekA4KWXJoBtrANwR4wHQ4b3dQVv/Q4jQIIT
 -----END CERTIFICATE-----''',
                         serverUrl: 'https://192.168.49.2:8443'
                         ]) {
+          withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
+                           passwordVariable: 'NEXUS_PASS', 
+                           usernameVariable: 'NEXUS_USER')]) {
+            sh """kubectl create secret docker-registry nexus \
+--docker-server=192.168.49.5:8085 \
+--docker-username=$NEXUS_USER \
+--docker-password=$NEXUS_PASS || echo 'Secret already exists!'"""
+          }
           sh 'kubectl get pods'
         }
       }  
