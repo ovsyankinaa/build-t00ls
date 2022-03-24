@@ -11,8 +11,6 @@ pipeline {
       }
     } 
     stage('SONARQUBE') {
-      steps {
-      }
     }
     stage('BUILD WAR') {
       steps {
