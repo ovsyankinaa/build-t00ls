@@ -54,9 +54,19 @@ pipeline {
         }
       }
     }
+    
     stage('ARCHIVE ARTIFACT') {
       steps{
         archiveArtifacts artifacts: 'helloworld-project/helloworld-ws/target/*.war'
+      }
+    }
+    
+    stage('START DEPLOY JOB') {
+      steps{
+        build job: 'deploy_', 
+          parameters: [
+            string(name: 'PARENT_BUILD', value: String.valueOf(BUILD_NUMBER))
+          ]
       }
     }
   }
