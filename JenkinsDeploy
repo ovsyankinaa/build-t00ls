@@ -40,6 +40,50 @@ G2byrLDHntFInFt+1EJ0038N8V1DqekA4KWXJoBtrANwR4wHQ4b3dQVv/Q4jQIIT
 --docker-username=$NEXUS_USER \
 --docker-password=$NEXUS_PASS || echo 'Secret already exists!'"""
           }
+          sh """cat <<EOF > nexus-deploy.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nexus-deploy
+  name: nexus-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus-pod
+  template:
+    metadata:
+      name: nexus-pod
+      labels:
+        app: nexus-pod
+    spec:
+      containers:
+      - image: 192.168.49.5:8085/repository/docker_repo:rc-$PARENT_BUILD
+        name: nexus-pod
+      imagePullSecrets:
+      - name: nexus
+EOF
+
+cat <<EOF > nexus-svc.yml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nexus-pod
+  name: nexus-svc
+spec:
+  externalIPs:
+  - 192.168.49.2
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: nexus-pod
+EOF"""
+          sh 'kubectl apply -f nexus-deploy.yml'
+          sh 'kubectl apply -f nexus-svc.yml'
           sh 'kubectl get pods'
         }
       }  
