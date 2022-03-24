@@ -1,0 +1,41 @@
+pipeline {
+  agent { label 'slave_1' }
+
+  stages {
+
+    stage('KUBERNETES') {
+      steps {
+        cleanWs()
+        withKubeConfig([credentialsId: 'k8s',
+                        caCertificate: '-----BEGIN CERTIFICATE-----
+MIID3DCCAsSgAwIBAgIBAjANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
+a3ViZUNBMB4XDTIyMDIxNzIwMTEyMloXDTI1MDIxNzIwMTEyMlowLDEXMBUGA1UE
+ChMOc3lzdGVtOm1hc3RlcnMxETAPBgNVBAMTCG1pbmlrdWJlMIIBIjANBgkqhkiG
+9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqoNkEMD8HnOhe8zS5OmdSMam9QkiebEXz0L1
+n4EgblMe/eOQP2GGtJ/sCGOfoKTaaaSIdULubebIQQPSMp+vjRL+dzY0dCMqeZ4I
+sRSbVaeB6Rj0jZhpznz0mPO8uhohjFVJ3Z8CjYvjUZOAUTHzx93cioqnbqZMbZZC
+CYcZq8b1SW2K6529wVHY3uWGieU+oK/dTjddHjwTmaUGhDf1hNZJjroc09NLujJm
+fr6lYiivgO1F+G0u9J9tsa0Esicu1jfX6sExyC3lpVvBiAv8yC4OiKhMggGBo0vL
+3OYiQf7Rl5sZhUjFN+jtDy+D7rNlPRKT5od0D/uHLloDcnOuwQIDAQABo4IBHjCC
+ARowDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcD
+AjAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFMbyBWv3Wl7r3IdWLv9bTo8P2eta
+MIG5BgNVHREEgbEwga6CCm1pbmlrdWJlQ0GCH2NvbnRyb2wtcGxhbmUubWluaWt1
+YmUuaW50ZXJuYWyCJGt1YmVybmV0ZXMuZGVmYXVsdC5zdmMuY2x1c3Rlci5sb2Nh
+bIIWa3ViZXJuZXRlcy5kZWZhdWx0LnN2Y4ISa3ViZXJuZXRlcy5kZWZhdWx0ggpr
+dWJlcm5ldGVzgglsb2NhbGhvc3SHBMCoMQKHBApgAAGHBH8AAAGHBAoAAAEwDQYJ
+KoZIhvcNAQELBQADggEBAHCoIAZOe4PM140ZnWDDZL25mWgWbqFwXNXMY6mP3JiP
+idqb3m+MX7Nsp0f6AXNKvrdk/IyfG+YliFI18GPyJh0HuFfhP2Ke90nFbvTi7Vz0
+OmjnBdUfyRSkG0+AMDnky/mN4yFDJk26o9JdQPijWaBukTIjPaFS9OAfOU54+t30
+P5U/VRRSlt2queRaf+v0sqzi3q4GnLCXoRT4pKDMftKu6YdV3jX1gI08Bq99cr3P
+G2byrLDHntFInFt+1EJ0038N8V1DqekA4KWXJoBtrANwR4wHQ4b3dQVv/Q4jQIIT
+/g06+f3RrY/3vbyOYJ+fRiVXDucrde/Ytyfv7Rp6VlQ=
+-----END CERTIFICATE-----',
+                        serverUrl: 'https://192.168.49.2:8443'
+                        ]) {
+          sh 'kubectl get pods'
+        }
+      }  
+    }
+  }
+}
+
