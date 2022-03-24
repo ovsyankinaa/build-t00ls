@@ -17,7 +17,10 @@ pipeline {
     stage('BUILD WAR') {
       steps {
         dir('helloworld-project/helloworld-ws/') {
-          sh 'mvn clean install'
+          withSonarQubeEnv('My SonarQube Server') {
+            sh 'mvn clean package sonar:sonar'
+          }
+//          sh 'mvn clean install'
         }
       }
     }
@@ -42,3 +45,8 @@ pipeline {
   }
 }
 
+
+/*sonar_scaner_4
+sonar_9.3
+http://192.168.49.1:9000
+sonar*/
