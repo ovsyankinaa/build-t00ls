@@ -63,7 +63,7 @@ pipeline {
     
     stage('START DEPLOY JOB') {
       steps{
-        build job: 'deploy_', 
+        build job: 'deploy_job', 
           parameters: [
             string(name: 'PARENT_BUILD', value: String.valueOf(BUILD_NUMBER))
           ]
