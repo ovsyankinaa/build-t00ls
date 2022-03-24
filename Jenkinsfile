@@ -1,5 +1,6 @@
 node('build-in') {
   stage('build'){
-    sh 'echo "BUILD"'
-}
+    cleanWs()
+    git branch: 'main', url: 'https://github.com/MaksimSurmach/build-t00ls-1.git'
+  }
 }
