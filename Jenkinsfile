@@ -18,7 +18,7 @@ pipeline {
       steps {
         dir('helloworld-project/helloworld-ws/') {
           withSonarQubeEnv('sonar_9.3') {
-            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.1:sonar'
+            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.1'
           }
           sh 'mvn clean install'
         }
