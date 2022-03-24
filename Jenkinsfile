@@ -1,6 +1,9 @@
 pipeline {
   agent { label 'build-in' }
-  
+  environment {
+    docker_img = ''
+  }
+
   tools { 
     maven 'maven_3.8.4' 
   }
@@ -25,7 +28,7 @@ pipeline {
     stage('BUILD IMAGE') {
       steps{
         script{
-          docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
+          docker_img = docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
         }
       }
     }
