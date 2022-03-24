@@ -7,7 +7,7 @@ pipeline {
       steps {
         cleanWs()
         withKubeConfig([credentialsId: 'k8s',
-                        caCertificate: '-----BEGIN CERTIFICATE-----
+                        caCertificate: '''-----BEGIN CERTIFICATE-----
 MIID3DCCAsSgAwIBAgIBAjANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
 a3ViZUNBMB4XDTIyMDIxNzIwMTEyMloXDTI1MDIxNzIwMTEyMlowLDEXMBUGA1UE
 ChMOc3lzdGVtOm1hc3RlcnMxETAPBgNVBAMTCG1pbmlrdWJlMIIBIjANBgkqhkiG
@@ -29,7 +29,7 @@ OmjnBdUfyRSkG0+AMDnky/mN4yFDJk26o9JdQPijWaBukTIjPaFS9OAfOU54+t30
 P5U/VRRSlt2queRaf+v0sqzi3q4GnLCXoRT4pKDMftKu6YdV3jX1gI08Bq99cr3P
 G2byrLDHntFInFt+1EJ0038N8V1DqekA4KWXJoBtrANwR4wHQ4b3dQVv/Q4jQIIT
 /g06+f3RrY/3vbyOYJ+fRiVXDucrde/Ytyfv7Rp6VlQ=
------END CERTIFICATE-----',
+-----END CERTIFICATE-----''',
                         serverUrl: 'https://192.168.49.2:8443'
                         ]) {
           sh 'kubectl get pods'
