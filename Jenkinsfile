@@ -17,7 +17,7 @@ pipeline {
     stage('BUILD WAR') {
       steps {
         dir('helloworld-project/helloworld-ws/') {
-          withSonarQubeEnv('My SonarQube Server') {
+          withSonarQubeEnv('sonar_9.3') {
             sh 'mvn clean package sonar:sonar'
           }
 //          sh 'mvn clean install'
