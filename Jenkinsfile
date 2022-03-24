@@ -24,7 +24,9 @@ pipeline {
 
     stage('BUILD IMAGE') {
       steps{
-        docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
+        script{
+          docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
+        }
       }
     }
 
