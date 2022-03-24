@@ -22,8 +22,8 @@ pipeline {
 -Dsonar.projectKey = "pipeline:maven"
 -Dsonar.projectName = pipeline_docker_maven
 -Dsonar.projectVersion = 1.0
--Dsonar.sources = "helloworld-project/helloworld-ws/src/main/java/org/jboss/as/quickstarts/wshelloworld"
--Dsonar.java.binaries = "helloworld-project/helloworld-ws/src/main/java/org/jboss/as/quickstarts/wshelloworld"
+-Dsonar.sources = "src/main/java/org/jboss/as/quickstarts/wshelloworld"
+-Dsonar.java.binaries = "src/main/java/org/jboss/as/quickstarts/wshelloworld"
 '''
           }
           sh 'mvn clean install'
