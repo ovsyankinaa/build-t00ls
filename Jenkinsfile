@@ -10,8 +10,6 @@ pipeline {
         git branch: 'aausiankin-pipeline', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
       }
     } 
-    stage('SONARQUBE') {
-    }
     stage('BUILD WAR') {
       steps {
         dir('helloworld-project/helloworld-ws/') {
