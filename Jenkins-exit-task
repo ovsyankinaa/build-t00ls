@@ -120,13 +120,19 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
               MAN_APPROVE = input message: 'Deploy', ok: 'Continue', parameters: [choice(name: 'MAN_APPROVE',
                              choices: 'YES\nNO',description: 'Deploy?')]
             }
-            sh "echo ${MAN_APPROVE}"
           }
           catch (error) {
             MAN_APPROVE = 'NO'
             sh 'echo "Timeout has been reached!"'
           }
         }
+      }
+    }
+    
+    stage('Deployment'){
+      when { environment name: 'MAN_APPROVE', value: 'YES' }
+      steps{
+        sh 'echo "DEPLOY"'
       }
     }
   }
