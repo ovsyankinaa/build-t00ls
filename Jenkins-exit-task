@@ -3,6 +3,7 @@ pipeline {
   options { timestamps () }
   environment{
     MAN_APPROVE = 'NO'
+    ARTIFACT = "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz" 
   }
   tools { 
     maven 'maven_3.8.4' 
@@ -86,7 +87,6 @@ pipeline {
 
         stage('Archiving artefact') {
           steps{
-            def ARTIFACT = "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz" 
             sh """tar -czf ${ARTIFACT} *_dsl_script.tar.gz \
 helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"""
             archiveArtifacts artifacts: "${ARTIFACT}", followSymlinks: false
