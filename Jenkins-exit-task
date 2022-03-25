@@ -121,7 +121,7 @@ http://172.22.0.5:8081/repository/exit_task/pipeline-aausiankin-${env.BUILD_NUMB
               MAN_APPROVE = input message: 'Deploy', ok: 'Continue', parameters: [choice(name: 'MAN_APPROVE',
                              choices: 'YES\nNO',description: 'Deploy?')]
             }
-            sh 'echo "Your choice - ${MAN_APROVE}"'
+            sh "echo "Your choice - ${MAN_APROVE}""
           }
           catch (error) {
             MAN_APROVE = 'YES'
