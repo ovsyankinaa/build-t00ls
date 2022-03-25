@@ -7,7 +7,7 @@ pipeline {
   
   stages {
 
-    stage('GIT') {
+    stage('Preparation') {
       steps {
         cleanWs()
         git branch: 'aausiankin-pipeline', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
@@ -37,11 +37,31 @@ pipeline {
       }
     }
 
+    stage('testing') {
+      parallel {
 
-    stage('pre-integration-test') {
-      steps{
-        dir('helloworld-project/helloworld-ws/') {
-          sh 'mvn test'
+        stage('pre-integration-test') {
+          steps{
+            dir('helloworld-project/helloworld-ws/') {
+              sh 'mvn pre-integration-test'
+            }
+          }
+        }
+
+        stage('integration-test') {
+          steps{
+            dir('helloworld-project/helloworld-ws/') {
+              sh 'echo "mvn pre-integration-test"'
+            }
+          }
+        }
+
+        stage('post-integration-test') {
+          steps{
+            dir('helloworld-project/helloworld-ws/') {
+              sh 'echo "mvn post-integration-test"'
+            }
+          }
         }
       }
     }
