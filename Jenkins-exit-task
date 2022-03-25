@@ -159,7 +159,7 @@ G2byrLDHntFInFt+1EJ0038N8V1DqekA4KWXJoBtrANwR4wHQ4b3dQVv/Q4jQIIT
 -----END CERTIFICATE-----''',
                         serverUrl: 'https://192.168.49.2:8443'
                         ]) {
-          sh "kubectl create ns ${NS}"
+          sh "kubectl create ns ${NS} || echo 'Secret already exists!'"
           withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
                            passwordVariable: 'NEXUS_PASS', 
                            usernameVariable: 'NEXUS_USER')]) {
