@@ -74,7 +74,7 @@ pipeline {
           ],
           wait : true
           copyArtifacts fingerprintArtifacts: true, 
-            projectName: 'day6/MNTLAB-aausiankin-child1-build-job', selector: lastSuccessful()
+            projectName: 'day6/MNTLAB-aausiankin-child1-build-job', selector: upstream()
       }
     }
   }
