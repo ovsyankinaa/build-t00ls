@@ -10,7 +10,7 @@ pipeline {
     stage('Preparation') {
       steps {
         cleanWs()
-        git branch: 'aausiankin-pipeline', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
+        git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
       }
     } 
 
@@ -74,7 +74,30 @@ pipeline {
           ],
           wait : true
           copyArtifacts fingerprintArtifacts: true, 
-            projectName: 'day6/MNTLAB-aausiankin-child1-build-job', selector: upstream()
+            projectName: 'day6/MNTLAB-aausiankin-child1-build-job', selector: lastSuccessful()
+      }
+    }
+
+    stage('Packaging anf Publishing results') {
+      parallel {
+
+        stage('pre-integration-test') {
+          steps{
+            dir('helloworld-project/helloworld-ws/') {
+              sh 'mvn pre-integration-test'
+            }
+          }
+        }
+
+        stage('BUILD AND UPLOAD DOCKER IMAGE') {
+          steps{
+            script{
+              docker_img = docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
+              docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
+              docker_img.push("rc-${env.BUILD_NUMBER}")
+            }
+          }
+        }
       }
     }
   }
