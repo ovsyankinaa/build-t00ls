@@ -1,6 +1,6 @@
 pipeline {
   agent { label 'build-in' }
-
+  options { timestamps () }
   tools { 
     maven 'maven_3.8.4' 
   }
