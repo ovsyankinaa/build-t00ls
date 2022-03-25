@@ -83,8 +83,17 @@ pipeline {
 
         stage('Archiving artefact') {
           steps{
-            sh "tar -czf pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz *_dsl_script.tar.gz helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"
-            archiveArtifacts artifacts: 'pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz', followSymlinks: false
+            sh """tar -czf pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz *_dsl_script.tar.gz \
+helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"""
+            archiveArtifacts artifacts: "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz",
+                                         followSymlinks: false
+            withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
+                             passwordVariable: 'NEXUS_PASS', 
+                             usernameVariable: 'NEXUS_USER')]) {
+              sh """curl --user $NEXUS_USER:$NEXUS_PASS --upload-file \
+$WORKSPACE/pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz \
+http://172.22.0.5:8081/repository/exit_task/pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz"""
+            }
           }
         }
 
