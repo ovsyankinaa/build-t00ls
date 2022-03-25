@@ -117,12 +117,12 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
         script{
           try {
             timeout(time:5, unit:'MINUTES') {
-              MAN_APPROVE = input message: 'Deploy', ok: 'Continue', parameters: [choice(name: 'MAN_APPROVE',
+              env.MAN_APPROVE = input message: 'Deploy', ok: 'Continue', parameters: [choice(name: 'APPROVE',
                              choices: 'YES\nNO',description: 'Deploy?')]
             }
           }
           catch (error) {
-            MAN_APPROVE = 'NO'
+            env.MAN_APPROVE = 'NO'
             sh 'echo "Timeout has been reached!"'
           }
         }
