@@ -220,7 +220,7 @@ EOF"""
           sh 'kubectl apply -f nexus-deploy.yml'
           sh 'kubectl apply -f nexus-svc.yml'
           sh 'kubectl get pods -n ${NS}'
-          sh "kubectl create ingress -n #{NS} nexus-ingress --rule=eap.com/=nexus-svc:8080"
+          sh "kubectl create ingress nexus-ingress -n ${NS} --rule='eap.com/=nexus-svc:8080'"
           sh 'sleep 20'
           sh '''if $(kubectl get pods -n ${NS} --field-selector="status.phase!=Running" --no-headers=true) \
 != "No resources found in default namespace."
