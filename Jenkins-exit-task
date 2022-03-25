@@ -2,7 +2,7 @@ pipeline {
   agent { label 'build-in' }
   options { timestamps () }
   environment{
-    ARiTIFACT = "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz" 
+    ARTIFACT = "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz" 
     NS = 'aausiankin'
   }
   tools { 
