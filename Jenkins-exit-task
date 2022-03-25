@@ -1,8 +1,8 @@
+def MAN_APPROVE = 'NO' 
 pipeline {
   agent { label 'build-in' }
   options { timestamps () }
   environment{
-    MAN_APPROVE = 'NO'
     ARTIFACT = "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz" 
     ENABLE_DEPLOY = 'NO'
   }
@@ -120,24 +120,20 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
             timeout(time:5, unit:'MINUTES') {
               MAN_APPROVE = input message: 'Deploy', ok: 'Continue', parameters: [choice(name: 'MAN_APPROVE',
                              choices: 'YES\nNO',description: 'Deploy?')]
-              if (env.APPROVE_PROD == 'YES'){
-                env.ENABLE_DEPLOY = 'YES'
-              } else {
-                env.ENABLE_DEPLOY = 'NO'
-              }
             }
+            sh 'echo $MAN_APPROVE'
           }
           catch (error) {
-            env.ENABLE_DEPLOY = 'NO'
+            MAN_APPROVE = 'NO'
             sh 'echo "Timeout has been reached!"'
           }
-          sh 'echo $env.ENABLE_DEPLOY'
+          sh 'echo $MAN_APPROVE'
         }
       }
     }
     
     stage('Deployment'){
-      when { environment name: 'ENABLE_DEPLOY', value: 'YES' }
+      when { environment name: 'MAN_APPROVE', value: 'YES' }
       steps{
         sh 'echo "DEPLOY"'
       }
