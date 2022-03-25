@@ -13,7 +13,7 @@ pipeline {
     stage('Preparation') {
       steps {
         cleanWs()
-        git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
+        git branch: 'aausiankin-exit-tas', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
       }
     } 
 
@@ -124,8 +124,8 @@ http://172.22.0.5:8081/repository/exit_task/pipeline-aausiankin-${env.BUILD_NUMB
             sh "echo ${MAN_APPROVE}"
           }
           catch (error) {
-            MAN_APPROVE = 'YES'
-            echo 'Timeout has been reached! Deploy automatically activated!'
+            MAN_APPROVE = 'NO'
+            sh 'echo "Timeout has been reached!"'
           }
         }
       }
