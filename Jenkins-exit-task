@@ -1,6 +1,9 @@
 pipeline {
   agent { label 'build-in' }
   options { timestamps () }
+  environment{
+    MAN_APPROVE = 'NO'
+  }
   tools { 
     maven 'maven_3.8.4' 
   }
@@ -105,6 +108,25 @@ http://172.22.0.5:8081/repository/exit_task/pipeline-aausiankin-${env.BUILD_NUMB
               docker_img.push("${env.BUILD_NUMBER}")
               }
             }
+          }
+        }
+      }
+    }
+
+    stage('Asking for manual approval'){
+      steps{
+        script{
+          try {
+            timeout(time:5, unit:'MINUTES') {
+              MAN_APPROVE = input message: 'Deploy to Production', ok: 'Continue',
+                              parameters: [choice(name: 'MAN_APPROVE', choices: 'YES\nNO', 
+                              description: 'Deploy?')]
+            }
+            echo "Your choice - ${MAN_APROVE}"
+          }
+          catch (error) {
+            MAN_APROVE = 'YES'
+            echo 'Timeout has been reached! Deploy automatically activated!'
           }
         }
       }
