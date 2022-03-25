@@ -4,6 +4,7 @@ pipeline {
   environment{
     MAN_APPROVE = 'NO'
     ARTIFACT = "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz" 
+    ENABLE_DEPLOY = 'NO'
   }
   tools { 
     maven 'maven_3.8.4' 
@@ -117,21 +118,26 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
         script{
           try {
             timeout(time:5, unit:'MINUTES') {
-              MAN_APPROVE = input message: 'Deploy', ok: 'Deployment', parameters: [choice(name: 'MAN_APPROVE',
+              MAN_APPROVE = input message: 'Deploy', ok: 'Continue', parameters: [choice(name: 'MAN_APPROVE',
                              choices: 'YES\nNO',description: 'Deploy?')]
+              if (env.APPROVE_PROD == 'YES'){
+                env.ENABLE_DEPLOY = 'YES'
+              } else {
+                env.ENABLE_DEPLOY = 'NO'
+              }
             }
           }
           catch (error) {
-            MAN_APPROVE = 'NO'
+            env.ENABLE_DEPLOY = 'NO'
             sh 'echo "Timeout has been reached!"'
           }
-          sh 'echo $MAN_APPROVE'
+          sh 'echo $env.ENABLE_DEPLOY'
         }
       }
     }
     
     stage('Deployment'){
-      when { environment name: 'MAN_APPROVE', value: 'YES' }
+      when { environment name: 'ENABLE_DEPLOY', value: 'YES' }
       steps{
         sh 'echo "DEPLOY"'
       }
