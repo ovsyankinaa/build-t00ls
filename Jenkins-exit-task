@@ -189,7 +189,7 @@ spec:
         app: nexus-pod
     spec:
       containers:
-      - image: 192.168.49.5:8085/repository/docker_repo:rc-$PARENT_BUILD
+      - image: 192.168.49.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}
         name: nexus-pod
       imagePullSecrets:
       - name: nexus
