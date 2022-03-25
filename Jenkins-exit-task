@@ -1,0 +1,50 @@
+pipeline {
+  agent { label 'build-in' }
+
+  tools { 
+    maven 'maven_3.8.4' 
+  }
+  
+  stages {
+
+    stage('GIT') {
+      steps {
+        cleanWs()
+        git branch: 'aausiankin-pipeline', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
+      }
+    } 
+
+    stage('Building code') {
+      steps {
+        dir('helloworld-project/helloworld-ws/') {
+          sh 'mvn clean package -DskipTests'
+        }
+      }
+    }
+
+    stage('Sonar scan') {
+      steps {
+        dir('helloworld-project/helloworld-ws/') {
+          withSonarQubeEnv('sonar_9.3') {
+            sh '''mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar \
+-Dsonar.projectKey=pipeline:maven \
+-Dsonar.projectName=pipeline_docker_maven \
+-Dsonar.projectVersion=1.0 \
+-Dsonar.sources=src/main/java/org/jboss/as/quickstarts/wshelloworld \
+-Dsonar.java.binaries=src/main/java/org/jboss/as/quickstarts/wshelloworld'''
+          }
+        }
+      }
+    }
+
+
+    stage('pre-integration-test') {
+      steps{
+        dir('helloworld-project/helloworld-ws/') {
+          sh 'mvn test'
+        }
+      }
+    }
+  }
+}
+
