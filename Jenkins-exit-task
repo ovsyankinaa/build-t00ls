@@ -81,11 +81,9 @@ pipeline {
     stage('Packaging anf Publishing results') {
       parallel {
 
-        stage('pre-integration-test') {
+        stage('Archiving artefact') {
           steps{
-            dir('helloworld-project/helloworld-ws/') {
-              sh 'mvn pre-integration-test'
-            }
+            sh 'echo "Archiving"'
           }
         }
 
@@ -95,6 +93,7 @@ pipeline {
               docker_img = docker.build "172.22.0.5:8085/repository/docker_repo:rc-${env.BUILD_NUMBER}"
               docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
               docker_img.push("rc-${env.BUILD_NUMBER}")
+              }
             }
           }
         }
