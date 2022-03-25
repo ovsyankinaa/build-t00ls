@@ -121,10 +121,10 @@ http://172.22.0.5:8081/repository/exit_task/pipeline-aausiankin-${env.BUILD_NUMB
               MAN_APPROVE = input message: 'Deploy', ok: 'Continue', parameters: [choice(name: 'MAN_APPROVE',
                              choices: 'YES\nNO',description: 'Deploy?')]
             }
-            sh "echo ${MAN_APROVE}"
+            sh "echo ${MAN_APPROVE}"
           }
           catch (error) {
-            MAN_APROVE = 'YES'
+            MAN_APPROVE = 'YES'
             echo 'Timeout has been reached! Deploy automatically activated!'
           }
         }
