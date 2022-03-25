@@ -125,6 +125,7 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
             env.MAN_APPROVE = 'NO'
             sh 'echo "Timeout has been reached!"'
           }
+          sh 'echo $env.MAN_APPROVE'
         }
       }
     }
