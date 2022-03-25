@@ -178,7 +178,11 @@ metadata:
   namespace: ${NS}
 spec:
   replicas: 1
-  strategy: RollingUpdate
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: nexus-pod
