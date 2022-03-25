@@ -13,7 +13,7 @@ pipeline {
     stage('Preparation') {
       steps {
         cleanWs()
-        git branch: 'aausiankin-exit-tas', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
+        git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
       }
     } 
 
@@ -86,16 +86,15 @@ pipeline {
 
         stage('Archiving artefact') {
           steps{
-            sh """tar -czf pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz *_dsl_script.tar.gz \
+            ARTIFACT = "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz" 
+            sh """tar -czf ${ARTIFACT} *_dsl_script.tar.gz \
 helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"""
-            archiveArtifacts artifacts: "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz",
-                                         followSymlinks: false
+            archiveArtifacts artifacts: "${ARTIFACT}", followSymlinks: false
             withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
                              passwordVariable: 'NEXUS_PASS', 
                              usernameVariable: 'NEXUS_USER')]) {
               sh """curl --user $NEXUS_USER:$NEXUS_PASS --upload-file \
-$WORKSPACE/pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz \
-http://172.22.0.5:8081/repository/exit_task/pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz"""
+$WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}"""
             }
           }
         }
