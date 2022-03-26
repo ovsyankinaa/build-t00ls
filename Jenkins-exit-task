@@ -216,11 +216,34 @@ spec:
     targetPort: 8080
   selector:
     app: nexus-pod
+EOF
+
+cat <<EOF > nexus-ingress.yml
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: nexus-ingress
+    namespace: aausiankin
+  spec:
+    ingressClassName: nginx
+    rules:
+    - host: eap.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: nexus-svc
+              port:
+                number: 8080
+          path: /helloworld-ws/
+          pathType: Exact
 EOF"""
           sh 'kubectl apply -f nexus-deploy.yml'
           sh 'kubectl apply -f nexus-svc.yml'
+          sh 'kubectl apply -f nexus-ingress.yml'
           sh 'kubectl get pods -n ${NS}'
-          sh "kubectl create ingress nexus-ingress -n ${NS} --rule='eap.com/=nexus-svc:8080'"
           sh 'sleep 20'
           sh '''if $(kubectl get pods -n ${NS} --field-selector="status.phase!=Running" --no-headers=true) \
 != "No resources found in default namespace."
