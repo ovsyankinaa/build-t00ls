@@ -259,7 +259,7 @@ EOF"""
           sh 'sleep 10'
           sh '''cat <<EOF > deploy.sh
 #!/bin/bash
-[[ \\$(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\n" -s) != "200" ]] && kubectl rollout undo deployment/nexus-deploy -n aausiankin || kubectl delete deploy nexus-deploy -n aausiankin
+[[ \\$(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\\\n" -s) != "200" ]] && kubectl rollout undo deployment/nexus-deploy -n aausiankin || kubectl delete deploy nexus-deploy -n aausiankin
 EOF'''
           sh 'cat deploy.sh'
           sh '/bin/bash deploy.sh'
