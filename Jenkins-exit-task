@@ -253,27 +253,15 @@ spec:
         pathType: Exact
 EOF"""
           sh 'prior_deploy=$(kubectl get deploy -n aausiankin --no-headers -o custom-columns=":metadata.name" | grep nexus-deploy)'
-          sh 'if $prior_deploy!=""; then $(kubectl scale deploy nexus-deploy  -n aausiankin --replicas=0); fi'
+          sh ''if [ $prior_deploy != "" ]; then kubectl scale deploy $prior_deploy -n aausiankin --replicas=0; fi
           sh 'kubectl apply -f nexus-deploy.yml'
           sh 'kubectl apply -f nexus-svc.yml'
           sh 'kubectl apply -f nexus-ingress.yml'
           sh 'sleep 60'
-          sh '''if $(kubectl get pods -n ${NS} --field-selector="status.phase!=Running" --no-headers=true) \
-!= "No resources found in default namespace."
-then
-	kubectl rollout undo deployment/nexus-deploy
-fi'''
+          sh "if (( $(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w '%{http_code}\n' -s) == '200' )); then kubectl delete deploy $prior_deploy -n aausiankin; else kubectl scale deploy $prior_deploy -n aausiankin --replicas=1; kubectl delete deploy -f nexus-deploy.yml; fi"
         }
       }
     }
   }
 }
-
-
-/*if (( $(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w '%{http_code}\n' -s) == "200" )); then echo "OK"; fi
-
-
- kubectl scale deploy nexus-deploy  -n aausiankin --replicas=0*/
-
-
 
