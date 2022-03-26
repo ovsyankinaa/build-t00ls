@@ -193,7 +193,7 @@ spec:
         app: nexus-pod
     spec:
       containers:
-      - image: 192.168.49.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}
+      - image: 92.168.49.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}
         name: nexus-pod
         livenessProbe:
           httpGet:
@@ -257,7 +257,7 @@ EOF"""
           sh 'kubectl apply -f nexus-svc.yml'
           sh 'kubectl apply -f nexus-ingress.yml'
           sh 'sleep 10'
-          sh 'if [[ $(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\n" -s) != "200" ]]; then kubectl rollout undo deployment/nexus-deploy; fi'
+          sh '[[ $(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\n" -s) != "200" ]] && kubectl rollout undo deployment/nexus-deploy'
         }
       }
     }
