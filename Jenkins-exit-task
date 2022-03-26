@@ -174,7 +174,7 @@ kind: Deployment
 metadata:
   labels:
     app: nexus-deploy
-  name: nexus-deploy
+  name: nexus-deploy-${env.BUILD_NUMBER}
   namespace: ${NS}
 spec:
   replicas: 1 
@@ -252,11 +252,12 @@ spec:
         path: /helloworld-ws/
         pathType: Exact
 EOF"""
+          sh 'prior_deploy=$(kubectl get deploy -n aausiankin --no-headers -o custom-columns=":metadata.name" | grep nexus-deploy)'
+          sh 'if $prior_deploy!=""; then $(kubectl scale deploy nexus-deploy  -n aausiankin --replicas=0); fi'
           sh 'kubectl apply -f nexus-deploy.yml'
           sh 'kubectl apply -f nexus-svc.yml'
           sh 'kubectl apply -f nexus-ingress.yml'
-          sh 'kubectl get pods -n ${NS}'
-          sh 'sleep 20'
+          sh 'sleep 60'
           sh '''if $(kubectl get pods -n ${NS} --field-selector="status.phase!=Running" --no-headers=true) \
 != "No resources found in default namespace."
 then
@@ -267,4 +268,12 @@ fi'''
     }
   }
 }
+
+
+/*if (( $(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w '%{http_code}\n' -s) == "200" )); then echo "OK"; fi
+
+
+ kubectl scale deploy nexus-deploy  -n aausiankin --replicas=0*/
+
+
 
