@@ -195,6 +195,12 @@ spec:
       containers:
       - image: 192.168.49.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}
         name: nexus-pod
+        livenessProbe:
+          httpGet:
+            path: /helloworld-ws
+            port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
       imagePullSecrets:
       - name: nexus
 EOF
