@@ -14,14 +14,14 @@ pipeline {
     stage('Preparation') {
       steps {
         cleanWs()
-        git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
+        git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.gi'
       }
     } 
 
     stage('Building code') {
       steps {
         dir('helloworld-project/helloworld-ws/') {
-          sh 'mvnssss clean package -DskipTests'
+          sh 'mvn clean package -DskipTests'
         }
       }
     }
@@ -274,7 +274,9 @@ EOF'''
       sh 'echo "This will run only if successful"'
     }
     failure {
-      sh 'echo "This will run only if failed"'
+      mail to: 'aliaksandr_ausiankin@epam.com',
+                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+                body: "Something is wrong with ${env.BUILD_URL}"
     }
   }
 }
