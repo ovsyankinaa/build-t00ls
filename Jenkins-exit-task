@@ -258,7 +258,7 @@ EOF"""
           sh 'kubectl apply -f nexus-ingress.yml'
           sh 'sleep 10'
           sh ''' sleep 10000
-[[ $(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\n" -s) != "200" ]] && kubectl rollout undo deployment/nexus-deploy -n aausiankin''''
+[[ $(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\n" -s) != "200" ]] && kubectl rollout undo deployment/nexus-deploy -n aausiankin'''
         }
       }
     }
