@@ -177,7 +177,7 @@ metadata:
   name: nexus-deploy
   namespace: ${NS}
 spec:
-  replicas: 2 
+  replicas: 1 
   strategy: 
     type: RollingUpdate
     rollingUpdate:
@@ -197,14 +197,14 @@ spec:
         name: nexus-pod
         livenessProbe:
           httpGet:
-            path: /helloworld-ws
+            path: /helloworld-ws/
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /helloworld-ws
+            path: /helloworld-ws/
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
