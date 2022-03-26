@@ -201,12 +201,14 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /helloworld-ws
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
+          failureThreshold: 3
       imagePullSecrets:
       - name: nexus
 EOF
