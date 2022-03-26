@@ -197,7 +197,13 @@ spec:
         name: nexus-pod
         livenessProbe:
           httpGet:
-            path: /helloworld-ws
+            path: /helloworld-ws/
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /helloworld-ws/
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
