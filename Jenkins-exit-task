@@ -252,7 +252,7 @@ spec:
         path: /helloworld-ws/
         pathType: Exact
 EOF"""
-          sh 'prior_deploy=$(kubectl get deploy -n aausiankin --no-headers -o custom-columns=":metadata.name" | grep nexus-deploy)'
+          sh 'prior_deploy=$(kubectl get deploy -n aausiankin --no-headers -o custom-columns=":metadata.name" | grep nexus-deploy || echo "")'
           sh 'if [ $prior_deploy != "" ]; then kubectl scale deploy $prior_deploy -n aausiankin --replicas=0; fi'
           sh 'kubectl apply -f nexus-deploy.yml'
           sh 'kubectl apply -f nexus-svc.yml'
