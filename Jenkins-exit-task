@@ -258,7 +258,12 @@ EOF"""
           sh 'kubectl apply -f nexus-svc.yml'
           sh 'kubectl apply -f nexus-ingress.yml'
           sh 'sleep 60'
-          sh 'if (( $(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\n" -s) == "200" )); then kubectl delete deploy $prior_deploy -n aausiankin || echo "prior deploy not deleted"; else kubectl scale deploy $prior_deploy -n aausiankin --replicas=1 || echo "Prior deploy not exists"; kubectl delete -f nexus-deploy.yml; fi'
+          sh '''if (( $(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\n" -s) == "200" )); then
+  kubectl delete deploy $prior_deploy -n aausiankin || echo "prior deploy not deleted"
+else
+  kubectl scale deploy $prior_deploy -n aausiankin --replicas=1 || echo "Prior deploy not exists"
+  kubectl delete -f nexus-deploy.yml
+fi'''
         }
       }
     }
