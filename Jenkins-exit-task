@@ -246,7 +246,7 @@ YG32dWSxWG77B9ZS6rkSfi82qMNSdb6wBoqgzUfZJh3ZqGJxkgOmDp01SQRKXevX
                                passwordVariable: 'NEXUS_PASS', 
                                usernameVariable: 'NEXUS_USER')]) {
                 sh """kubectl create secret -n ${NS} docker-registry nexus \
---docker-server=192.168.49.5:8085 \
+--docker-server=192.168.49.4:8085 \
 --docker-username=$NEXUS_USER \
 --docker-password=$NEXUS_PASS || echo 'Secret already exists!'"""
             }
