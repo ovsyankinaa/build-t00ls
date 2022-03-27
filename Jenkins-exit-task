@@ -12,13 +12,18 @@ pipeline {
   
   stages {
 
-    stage('Preparation') {
-      steps {
-        script{ LS_STAGE_NAME = env.STAGE_NAME }
-        cleanWs()
-        git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.gi'
-      }
-    } 
+    try {
+      stage('Preparation') {
+        steps {
+          script{ LS_STAGE_NAME = env.STAGE_NAME }
+          cleanWs()
+          git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.gi'
+        }
+      } 
+    catch (err){
+      echo "YYYYYYYYYYYYYYFailed: ${err}"
+      throw err
+    }
 
     stage('Building code') {
       steps {
