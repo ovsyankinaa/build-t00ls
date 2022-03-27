@@ -19,7 +19,7 @@ pipeline {
           try {      
             LS_STAGE_NAME = env.STAGE_NAME 
             cleanWs()
-            git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.gi'
+            git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.git'
           }
           catch (error){
             ERROR_MESSAGE = "${error}"
@@ -31,9 +31,17 @@ pipeline {
 
     stage('Building code') {
       steps {
-        script{ LS_STAGE_NAME = env.STAGE_NAME }
-        dir('helloworld-project/helloworld-ws/') {
-          sh 'mvn clean package -DskipTests'
+        script{
+          try {
+            LS_STAGE_NAME = env.STAGE_NAME 
+            dir('helloworld-project/helloworld-w/') {
+              sh 'mvn clean package -DskipTests'
+            }
+          }
+          catch (error){
+            ERROR_MESSAGE = "${error}"
+            throw error
+          }
         }
       }
     }
