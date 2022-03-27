@@ -177,7 +177,7 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
           steps{
             script{
               try{
-                docker_img = docker.build "72.22.0.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}"
+                docker_img = docker.build "172.22.0.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}"
                 docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
                 docker_img.push("${env.BUILD_NUMBER}")
                 }
@@ -196,7 +196,6 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
     stage('Asking for manual approval'){
       steps{
         script{
-          LS_STAGE_NAME = env.STAGE_NAME
           try {
             timeout(time:5, unit:'MINUTES') {
               env.MAN_APPROVE = input message: 'Deploy', ok: 'Continue', 
@@ -204,8 +203,11 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
             }
           }
           catch (error) {
+            LS_STAGE_NAME = env.STAGE_NAME
             env.MAN_APPROVE = 'NO'
             sh 'echo "Timeout has been reached!"'
+            ERROR_MESSAGE = "${error}"
+            throw error
           }
         }
       }
@@ -215,9 +217,10 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
       when { environment name: 'MAN_APPROVE', value: 'YES' }
       agent { label 'slave_1' }
       steps{
-        script{ LS_STAGE_NAME = env.STAGE_NAME }
-        withKubeConfig([credentialsId: '1e5b9e86-554d-498f-97d1-0806cac82bfb',
-                        caCertificate: '''-----BEGIN CERTIFICATE-----
+        script{
+          try{
+            withKubeConfig([credentialsId: '1e5b9e86-554d-498f-97d1-0806cac82bfb',
+                            caCertificate: '''-----BEGIN CERTIFICATE-----
 MIID3DCCAsSgAwIBAgIBAjANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
 a3ViZUNBMB4XDTIyMDIxNzIwMTEyMloXDTI1MDIxNzIwMTEyMlowLDEXMBUGA1UE
 ChMOc3lzdGVtOm1hc3RlcnMxETAPBgNVBAMTCG1pbmlrdWJlMIIBIjANBgkqhkiG
@@ -240,18 +243,18 @@ P5U/VRRSlt2queRaf+v0sqzi3q4GnLCXoRT4pKDMftKu6YdV3jX1gI08Bq99cr3P
 G2byrLDHntFInFt+1EJ0038N8V1DqekA4KWXJoBtrANwR4wHQ4b3dQVv/Q4jQIIT
 /g06+f3RrY/3vbyOYJ+fRiVXDucrde/Ytyfv7Rp6VlQ=
 -----END CERTIFICATE-----''',
-                        serverUrl: 'https://192.168.49.2:8443'
-                        ]) {
-          sh "kubectl create ns ${NS} || echo 'Secret already exists!'"
-          withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
-                           passwordVariable: 'NEXUS_PASS', 
-                           usernameVariable: 'NEXUS_USER')]) {
-            sh """kubectl create secret -n ${NS} docker-registry nexus \
+                            serverUrl: 'https://192.168.49.2:8443'
+                            ]) {
+            sh "kubectl create ns ${NS} || echo 'Secret already exists!'"
+            withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
+                             passwordVariable: 'NEXUS_PASS', 
+                             usernameVariable: 'NEXUS_USER')]) {
+              sh """kubectl create secret -n ${NS} docker-registry nexus \
 --docker-server=192.168.49.5:8085 \
 --docker-username=$NEXUS_USER \
 --docker-password=$NEXUS_PASS || echo 'Secret already exists!'"""
-          }
-          sh """cat <<EOF > nexus-deploy.yml
+            }
+            sh """cat <<EOF > nexus-deploy.yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -336,17 +339,23 @@ spec:
         pathType: Exact
 EOF"""
 
-          sh 'kubectl apply -f nexus-deploy.yml'
-          sh 'kubectl apply -f nexus-svc.yml'
-          sh 'kubectl apply -f nexus-ingress.yml'
-          sh 'sleep 10'
-          sh '''cat <<EOF > deploy.sh
+            sh 'kubectl apply -f nexus-deploy.yml'
+            sh 'kubectl apply -f nexus-svc.yml'
+            sh 'kubectl apply -f nexus-ingress.yml'
+            sh 'sleep 10'
+            sh '''cat <<EOF > deploy.sh
 #!/bin/bash
 [[ \\$(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\\\n" -s) != "200" ]] && (kubectl rollout undo deployment/nexus-deploy -n ${NS} || kubectl delete deploy nexus-deploy -n ${NS})
 exit 0
 EOF'''
-          sh 'cat deploy.sh'
-          sh '/bin/bash deploy.sh'
+            sh 'cat deploy.sh'
+            sh '/bin/bash deploy.sh'
+          }
+          catch (error){
+            LS_STAGE_NAME = env.STAGE_NAME 
+            ERROR_MESSAGE = "${error}"
+            throw error
+          } 
         }
       }
     }
