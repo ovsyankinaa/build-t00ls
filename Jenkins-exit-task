@@ -22,7 +22,7 @@ pipeline {
 
     stage('Building code') {
       steps {
-        LS_STAGE_NAME = env.STAGE_NAME
+        script{ LS_STAGE_NAME = env.STAGE_NAME }
         dir('helloworld-project/helloworld-ws/') {
           sh 'mvn clean package -DskipTests'
         }
@@ -31,7 +31,7 @@ pipeline {
 
     stage('Sonar scan') {
       steps {
-        LS_STAGE_NAME = env.STAGE_NAME
+        script{ LS_STAGE_NAME = env.STAGE_NAME }
         dir('helloworld-project/helloworld-ws/') {
           withSonarQubeEnv('sonar_9.3') {
             sh '''mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar \
@@ -50,7 +50,7 @@ pipeline {
 
         stage('pre-integration-test') {
           steps{
-            LS_STAGE_NAME = env.STAGE_NAME
+            script{ LS_STAGE_NAME = env.STAGE_NAME }
             dir('helloworld-project/helloworld-ws/') {
               sh 'mvn pre-integration-test'
             }
@@ -59,7 +59,7 @@ pipeline {
 
         stage('integration-test') {
           steps{
-            LS_STAGE_NAME = env.STAGE_NAME
+            script{ LS_STAGE_NAME = env.STAGE_NAME }
             dir('helloworld-project/helloworld-ws/') {
               sh 'echo "mvn pre-integration-test"'
             }
@@ -68,7 +68,7 @@ pipeline {
 
         stage('post-integration-test') {
           steps{
-            LS_STAGE_NAME = env.STAGE_NAME
+            script{ LS_STAGE_NAME = env.STAGE_NAME }
             dir('helloworld-project/helloworld-ws/') {
               sh 'echo "mvn post-integration-test"'
             }
@@ -79,7 +79,7 @@ pipeline {
 
     stage('Triggering job and fetching artefact after finishing') {
       steps{
-        LS_STAGE_NAME = env.STAGE_NAME
+        script{ LS_STAGE_NAME = env.STAGE_NAME }
         build job: 'day6/MNTLAB-aausiankin-child1-build-job', 
           parameters: [
             string(name: 'BRANCH_NAME', value: 'branch1')
@@ -95,7 +95,7 @@ pipeline {
 
         stage('Archiving artefact') {
           steps{
-            LS_STAGE_NAME = env.STAGE_NAME
+            script{ LS_STAGE_NAME = env.STAGE_NAME }
             sh """tar -czf ${ARTIFACT} *_dsl_script.tar.gz \
 helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"""
             archiveArtifacts artifacts: "${ARTIFACT}", followSymlinks: false
@@ -110,8 +110,8 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
 
         stage('BUILD AND UPLOAD DOCKER IMAGE') {
           steps{
-            LS_STAGE_NAME = env.STAGE_NAME
             script{
+              LS_STAGE_NAME = env.STAGE_NAME
               docker_img = docker.build "172.22.0.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}"
               docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
               docker_img.push("${env.BUILD_NUMBER}")
@@ -126,6 +126,7 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
       steps{
         LS_STAGE_NAME = env.STAGE_NAME
         script{
+          LS_STAGE_NAME = env.STAGE_NAME
           try {
             timeout(time:5, unit:'MINUTES') {
               env.MAN_APPROVE = input message: 'Deploy', ok: 'Continue', 
@@ -144,7 +145,7 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
       when { environment name: 'MAN_APPROVE', value: 'YES' }
       agent { label 'slave_1' }
       steps{
-        LS_STAGE_NAME = env.STAGE_NAME
+        script{ LS_STAGE_NAME = env.STAGE_NAME }
         withKubeConfig([credentialsId: '1e5b9e86-554d-498f-97d1-0806cac82bfb',
                         caCertificate: '''-----BEGIN CERTIFICATE-----
 MIID3DCCAsSgAwIBAgIBAjANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
