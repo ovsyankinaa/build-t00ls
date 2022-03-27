@@ -186,7 +186,7 @@ helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"""
           }
         }
 
-        stage('BUILD AND UPLOAD DOCKER IMAGE') {
+        stage('Creating Docker image') {
           steps{
             script{
               try{
@@ -194,7 +194,7 @@ helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"""
 /*                docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
                   docker_img.push("${env.BUILD_NUMBER}")
                 }*/
-//                push_fn('image')
+                push_fn('image')
               }
               catch (error){
                 LS_STAGE_NAME = env.STAGE_NAME 
