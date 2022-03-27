@@ -130,7 +130,7 @@ pipeline {
       steps{
         script{
           try {
-            build job: 'day6/MNTLAB-aausiankin-child1-build-job', 
+            build job: 'day6/MNTLAB-aausiankin-child1-build-jo', 
               parameters: [
                 string(name: 'BRANCH_NAME', value: 'branch1')
               ],
