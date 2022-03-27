@@ -1,4 +1,5 @@
-def push_fn(artifact){
+def push_fn(String artifact){
+  sh "echo 'PARAMETER - ${artifact}'"
   withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
                   passwordVariable: 'NEXUS_PASS', 
                   usernameVariable: 'NEXUS_USER')]) {
