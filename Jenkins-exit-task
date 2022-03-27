@@ -338,7 +338,7 @@ EOF"""
               sh 'kubectl apply -f nexus-deploy.yml'
               sh 'kubectl apply -f nexus-svc.yml'
               sh 'kubectl apply -f nexus-ingress.yml'
-              sh 'sleep 6000'
+              sh 'sleep 10'
               sh '''cat <<EOF > deploy.sh
 #!/bin/bash
 [[ \\$(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\\\n" -s) != "200" ]] && (kubectl rollout undo deployment/nexus-deploy -n ${NS} || kubectl delete deploy nexus-deploy -n ${NS})
