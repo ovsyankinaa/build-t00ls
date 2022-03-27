@@ -79,7 +79,7 @@ pipeline {
               try{
                 LS_STAGE_NAME = env.STAGE_NAME 
                 dir('helloworld-project/helloworld-ws/') {
-                  sh 'mvn pre-integration-tes'
+                  sh 'mvn pre-integration-test'
                 }
               }
               catch (error){
@@ -92,9 +92,17 @@ pipeline {
 
         stage('integration-test') {
           steps{
-            script{ LS_STAGE_NAME = env.STAGE_NAME }
-            dir('helloworld-project/helloworld-ws/') {
-              sh 'echo "mvn pre-integration-test"'
+            script{
+              try{
+                LS_STAGE_NAME = env.STAGE_NAME 
+                dir('helloworld-project/helloworld-ws/') {
+                  sh 'ech "mvn integration-test"'
+                }
+              }
+              catch (error){
+                ERROR_MESSAGE = "${error}"
+                throw error
+              }
             }
           }
         }
