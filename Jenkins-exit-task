@@ -291,19 +291,21 @@ EOF'''
   }
 
   post {
-    script{ env.ERROR_DATE = sh(returnStdout: true, script: 'date').trim()}
     success {
+      script{ env.EVENT_DATE = sh(returnStdout: true, script: 'date').trim()}
       mail to: 'aliaksandr_ausiankin@epam.com',
                 subject: "Pipeline: ${currentBuild.fullDisplayName} completed successfully",
-                body: "Pipeline completed successfully ${env.BUILD_URL}"
+                body: """Pipeline completed successfully ${env.BUILD_URL}
+Event date - ${EVENT_DATE}"""
     }
     failure {
+      script{ env.EVENT_DATE = sh(returnStdout: true, script: 'date').trim()}
       mail to: 'aliaksandr_ausiankin@epam.com',
                 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                 body: """Something is wrong with ${env.BUILD_URL}
 Failed stage - ${LS_STAGE_NAME}
 Error message - ${ERROR_MESSAGE}
-Error date - ${ERROR_DATE}"""
+Error date - ${EVENT_DATE}"""
     }
   }
 }
