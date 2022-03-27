@@ -7,12 +7,13 @@ def push_fn(String artifact){
         sh """curl --user $NEXUS_USER:$NEXUS_PASS --upload-file \
 $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}"""
       }
-    break;
+      break;
     case image:
       docker_img = docker.build "172.22.0.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}"
       docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
-      docker_img.push("${env.BUILD_NUMBER}")*/
-    break;
+        docker_img.push("${env.BUILD_NUMBER}")
+      }
+      break;
   }
 }
 
@@ -192,9 +193,9 @@ helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"""
               try{
 /*                docker_img = docker.build "172.22.0.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}"
                 docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
-                docker_img.push("${env.BUILD_NUMBER}")*/
+                  docker_img.push("${env.BUILD_NUMBER}")
+                }*/
                 push_fn('image')
-                }
               }
               catch (error){
                 LS_STAGE_NAME = env.STAGE_NAME 
