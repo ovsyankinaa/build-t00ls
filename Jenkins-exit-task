@@ -124,7 +124,6 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
 
     stage('Asking for manual approval'){
       steps{
-        LS_STAGE_NAME = env.STAGE_NAME
         script{
           LS_STAGE_NAME = env.STAGE_NAME
           try {
