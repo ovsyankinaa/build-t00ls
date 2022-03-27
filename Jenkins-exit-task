@@ -95,7 +95,7 @@ pipeline {
             script{
               try{
                 dir('helloworld-project/helloworld-ws/') {
-                  sh 'ech "mvn integration-test"'
+                  sh 'echo "mvn integration-test"'
                 }
               }
               catch (error){
