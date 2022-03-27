@@ -351,11 +351,11 @@ EOF'''
             sh 'cat deploy.sh'
             sh '/bin/bash deploy.sh'
           }
-          catch (error){
-            LS_STAGE_NAME = env.STAGE_NAME 
-            ERROR_MESSAGE = "${error}"
-            throw error
-          } 
+        }
+        catch (error){
+          LS_STAGE_NAME = env.STAGE_NAME 
+          ERROR_MESSAGE = "${error}"
+          throw error
         }
       }
     }
