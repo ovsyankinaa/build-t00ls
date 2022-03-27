@@ -154,7 +154,7 @@ pipeline {
           steps{
             script{
               try{
-                sh """ta -czf ${ARTIFACT} *_dsl_script.tar.gz \
+                sh """tar -czf ${ARTIFACT} *_dsl_script.tar.gz \
 helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"""
                 archiveArtifacts artifacts: "${ARTIFACT}", followSymlinks: false
                 withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
@@ -176,11 +176,17 @@ $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}""
         stage('BUILD AND UPLOAD DOCKER IMAGE') {
           steps{
             script{
-              LS_STAGE_NAME = env.STAGE_NAME
-              docker_img = docker.build "172.22.0.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}"
-              docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
-              docker_img.push("${env.BUILD_NUMBER}")
+              try{
+                docker_img = docker.build "72.22.0.5:8085/repository/docker_repo/helloworld-aausiankin:${env.BUILD_NUMBER}"
+                docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
+                docker_img.push("${env.BUILD_NUMBER}")
+                }
               }
+              catch (error){
+                LS_STAGE_NAME = env.STAGE_NAME 
+                ERROR_MESSAGE = "${error}"
+                throw error
+              } 
             }
           }
         }
