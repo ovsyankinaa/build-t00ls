@@ -245,16 +245,16 @@ G2byrLDHntFInFt+1EJ0038N8V1DqekA4KWXJoBtrANwR4wHQ4b3dQVv/Q4jQIIT
 -----END CERTIFICATE-----''',
                             serverUrl: 'https://192.168.49.2:8443'
                             ]) {
-            sh "kubectl create ns ${NS} || echo 'Secret already exists!'"
-            withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
-                             passwordVariable: 'NEXUS_PASS', 
-                             usernameVariable: 'NEXUS_USER')]) {
-              sh """kubectl create secret -n ${NS} docker-registry nexus \
+              sh "kubectl create ns ${NS} || echo 'Secret already exists!'"
+              withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
+                               passwordVariable: 'NEXUS_PASS', 
+                               usernameVariable: 'NEXUS_USER')]) {
+                sh """kubectl create secret -n ${NS} docker-registry nexus \
 --docker-server=192.168.49.5:8085 \
 --docker-username=$NEXUS_USER \
 --docker-password=$NEXUS_PASS || echo 'Secret already exists!'"""
             }
-            sh """cat <<EOF > nexus-deploy.yml
+              sh """cat <<EOF > nexus-deploy.yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -339,23 +339,24 @@ spec:
         pathType: Exact
 EOF"""
 
-            sh 'kubectl apply -f nexus-deploy.yml'
-            sh 'kubectl apply -f nexus-svc.yml'
-            sh 'kubectl apply -f nexus-ingress.yml'
-            sh 'sleep 10'
-            sh '''cat <<EOF > deploy.sh
+              sh 'kubectl apply -f nexus-deploy.yml'
+              sh 'kubectl apply -f nexus-svc.yml'
+              sh 'kubectl apply -f nexus-ingress.yml'
+              sh 'sleep 10'
+              sh '''cat <<EOF > deploy.sh
 #!/bin/bash
 [[ \\$(curl -LI http://eap.com/helloworld-ws/ -o /dev/null -w "%{http_code}\\\n" -s) != "200" ]] && (kubectl rollout undo deployment/nexus-deploy -n ${NS} || kubectl delete deploy nexus-deploy -n ${NS})
 exit 0
 EOF'''
-            sh 'cat deploy.sh'
-            sh '/bin/bash deploy.sh'
+              sh 'cat deploy.sh'
+              sh '/bin/bash deploy.sh'
+            }
           }
-        }
-        catch (error){
-          LS_STAGE_NAME = env.STAGE_NAME 
-          ERROR_MESSAGE = "${error}"
-          throw error
+          catch (error){
+            LS_STAGE_NAME = env.STAGE_NAME 
+            ERROR_MESSAGE = "${error}"
+            throw error
+          }
         }
       }
     }
