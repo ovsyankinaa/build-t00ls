@@ -14,7 +14,7 @@ pipeline {
 
     stage('Preparation') {
       steps {
-        LS_STAGE_NAME = env.STAGE_NAME
+        env.LS_STAGE_NAME = env.STAGE_NAME
         cleanWs()
         git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.gi'
       }
