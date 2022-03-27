@@ -130,7 +130,7 @@ pipeline {
       steps{
         script{
           try {
-            build job: 'day6/MNTLAB-aausiankin-child1-build-jo', 
+            build job: 'day6/MNTLAB-aausiankin-child1-build-job', 
               parameters: [
                 string(name: 'BRANCH_NAME', value: 'branch1')
               ],
@@ -154,7 +154,7 @@ pipeline {
           steps{
             script{
               try{
-                sh """tar -czf ${ARTIFACT} *_dsl_script.tar.gz \
+                sh """ta -czf ${ARTIFACT} *_dsl_script.tar.gz \
 helloworld-project/helloworld-ws/target/helloworld-ws.war Jenkins-exit-task"""
                 archiveArtifacts artifacts: "${ARTIFACT}", followSymlinks: false
                 withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
