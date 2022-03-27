@@ -5,6 +5,7 @@ pipeline {
     ARTIFACT = "pipeline-aausiankin-${env.BUILD_NUMBER}.tar.gz" 
     NS = 'aausiankin'
     LS_STAGE_NAME = ''
+    ERROR_MESSAGE = ''
   }
   tools { 
     maven 'maven_3.8.4' 
@@ -21,6 +22,7 @@ pipeline {
             git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.gi'
           }
           catch (error){
+            ERROR_MESSAGE = "${error}"
             throw error
           }
         }
@@ -300,7 +302,7 @@ EOF'''
                 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                 body: """Something is wrong with ${env.BUILD_URL}
 Failed stage - ${LS_STAGE_NAME}
-Error message - ${error}"""
+Error message - ${ERROR_MESSAGE}"""
     }
   }
 }
