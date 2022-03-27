@@ -1,11 +1,9 @@
 def push_fn(artifact){
-  if (artifact="maven"){
-    withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
-                    passwordVariable: 'NEXUS_PASS', 
-                    usernameVariable: 'NEXUS_USER')]) {
-      sh """curl --user $NEXUS_USER:$NEXUS_PASS --upload-file \
+  withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
+                  passwordVariable: 'NEXUS_PASS', 
+                  usernameVariable: 'NEXUS_USER')]) {
+    sh """curl --user $NEXUS_USER:$NEXUS_PASS --upload-file \
 $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}"""
-    }
   }
 }
 
