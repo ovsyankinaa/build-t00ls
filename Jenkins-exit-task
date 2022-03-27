@@ -20,6 +20,7 @@ pipeline {
           git branch: 'aausiankin-exit-task', url: 'https://github.com/ovsyankinaa/build-t00ls.gi'
         }
       } 
+    }    
     catch (err){
       echo "YYYYYYYYYYYYYYFailed: ${err}"
       throw err
