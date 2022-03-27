@@ -1,6 +1,6 @@
 def push_fn(String artifact){
   switch(artifact) {
-    case maven:
+    case 'maven':
       withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
                       passwordVariable: 'NEXUS_PASS', 
                       usernameVariable: 'NEXUS_USER')]) {
@@ -8,7 +8,7 @@ def push_fn(String artifact){
 $WORKSPACE/${ARTIFACT} http://172.22.0.5:8081/repository/exit_task/${ARTIFACT}"""
       }
       break;
-    case image:
+    case 'image':
       docker.withRegistry( 'http://172.22.0.5:8085', 'jenkins_nexus' ) {
         docker_img.push("${env.BUILD_NUMBER}")
       }
