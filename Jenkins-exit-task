@@ -288,6 +288,7 @@ EOF'''
                 body: "Pipeline completed successfully ${env.BUILD_URL}"
     }
     failure {
+      sh 'env'
       mail to: 'aliaksandr_ausiankin@epam.com',
                 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                 body: """Something is wrong with ${env.BUILD_URL}
