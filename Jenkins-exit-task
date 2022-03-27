@@ -113,6 +113,7 @@ pipeline {
               try{
                 dir('helloworld-project/helloworld-ws/') {
                   sh 'cho "mvn post-integration-test"'
+                }
               }
               catch (error){
                 LS_STAGE_NAME = env.STAGE_NAME 
