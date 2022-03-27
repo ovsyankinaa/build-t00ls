@@ -297,9 +297,7 @@ EOF'''
                 body: "Pipeline completed successfully ${env.BUILD_URL}"
     }
     failure {
-      environment {
-        ERROR_DATE = sh(returnStdout: true, script: 'date').trim()
-      }
+      env.ERROR_DATE = sh(returnStdout: true, script: 'date').trim()
       mail to: 'aliaksandr_ausiankin@epam.com',
                 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                 body: """Something is wrong with ${env.BUILD_URL}
