@@ -1,5 +1,5 @@
 def push_fn(artifact){
-  if (artifact = "maven"){
+  if (artifact="maven"){
     withCredentials([usernamePassword(credentialsId: 'jenkins_docker',
                     passwordVariable: 'NEXUS_PASS', 
                     usernameVariable: 'NEXUS_USER')]) {
